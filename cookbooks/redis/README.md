@@ -1,16 +1,6 @@
 Redis Cookbook for EngineYard EYCloud
 =========
 
-IMPORTANT NOTE FOR STABLE-V4 DEPLOYMENTS
-----------------------------------------
-The default Redis package in our new version of Gentoo on the stable-v4 stack has an updated location for the redis-server binary.  
-In templates/default/redis.monitrc.erb, line 3 should be updated to the following:
-
-```
-  start program = "/usr/sbin/redis-server <%= @configfile %>"
-```
-
-
 [Redis][1] Redis is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain [strings][7], [hashes][6], [lists][5], [sets][4] and [sorted sets][3].  Learn More at the [introduction][7].
 
 Overview
@@ -48,6 +38,14 @@ Ensure you have the Dependencies installed in your local cookbooks repository ..
 Add the following to your main/recipes/default.rb
 
 ``include_recipe "redis"``
+
+Choosing a different Redis version
+--------
+This recipe installs Redis 2.6.16 by default. To install Redis 2.4.17 or Redis 2.8.13:
+
+1. Change the `:version => "2.6.16",` line in `attributes/default.rb` to the version you want to install
+2. Copy over the corresponding `redis-2.x.conf.erb` file to `templates/default/redis.conf.erb`
+
 
 Notes
 ------

@@ -10,15 +10,12 @@ if util_or_app_server?(node[:sidekiq][:utility_name])
   end
 
   # bin script
-  template "/engineyard/bin/sidekiq" do
+  remote_file "/engineyard/bin/sidekiq" do
     mode 0755
-    source "sidekiq.erb" 
+    source "sidekiq"
     backup false
-    variables({
-      :user => node[:owner_name]
-    })
   end
-  
+
   # loop through applications
   node[:applications].each do |app_name, _|
     # reload monit
@@ -38,6 +35,15 @@ if util_or_app_server?(node[:sidekiq][:utility_name])
         :rails_env => node[:environment][:framework_env],
         :memory_limit => 400 # MB
       })
+      notifies :run, resources(:execute => "restart-sidekiq-for-#{app_name}")
+    end
+    
+    # database.yml
+    execute "update-database-yml-pg-pool-for-#{app_name}" do
+      db_yaml_file = "/data/#{app_name}/shared/config/database.yml"
+      command "sed -ibak --follow-symlinks 's/reconnect/pool:      #{node[:sidekiq][:concurrency]}\\\n  reconnect/g' #{db_yaml_file}"
+      action :run
+      only_if "test -f #{db_yaml_file} && ! grep 'pool: *#{node[:sidekiq][:concurrency]}' #{db_yaml_file}"
       notifies :run, resources(:execute => "restart-sidekiq-for-#{app_name}")
     end
 

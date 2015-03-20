@@ -13,7 +13,7 @@ By default, the cookbook will look for a utility instance named `sphinx` and wil
 Uncomment the following line inside of `main/recipes/default.rb`:
 
 ```
-include_recipe "sphinx"
+include_recipe "thinking-sphinx-3"
 ```
 
 Then upload and apply your cookbooks:
@@ -27,7 +27,7 @@ You will also need to add a deploy hook to restart Sphinx on deploy. Create a fi
 
 ```
 on_app_servers_and_utilities do
-  run "[[ -d #{shared_path}/sphinx ]] && ln -nfs #{shared_path}/sphinx #{current_path}/db/sphinx"
-  run "cd #{current_path} && RAILS_ENV=#{environment} bundle exec rake ts:configure"
+  run "[[ -d #{config.shared_path}/sphinx ]] && ln -nfs #{config.shared_path}/sphinx #{config.current_path}/db/sphinx"
+  run "cd #{config.current_path} && RAILS_ENV=#{config.environment} bundle exec rake ts:configure"
 end
 ```

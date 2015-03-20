@@ -4,6 +4,9 @@
 #  }
 #end
 
+# uncomment to deny access to /log, /config, and .git directories as well as any .yml files
+# include_recipe "deny-directories"
+
 # uncomment to turn on thinking sphinx 2/ultra sphinx. Remember to edit cookbooks/sphinx/recipes/default.rb first!
 # include_recipe "sphinx"
 
@@ -48,6 +51,10 @@ include_recipe "sidekiq"
 #uncomment to install specified packages
 # You must add your packages to packages/attributes/packages.rb
 #require_recipe "packages"
+
+#uncomment to add specified cron jobs for application user (deploy)
+# You must add your cron jobs to cron/attributes/cron.rb
+#require_recipe "cron"
 
 #uncomment to run the exim::auth recipe
 #include_recipe "exim::auth"
@@ -102,9 +109,17 @@ include_recipe "redis"
 # To install a Jenkins environment, uncomment below
 # include_recipe "jenkins"
 
+# include_recipe "eventmachine"
+
+#uncomment to include the Magento recipe
+#include_recipe "magento"
+
+# uncomment to include the Postgres Maintenance recipe
+#include_recipe "postgresql_maintenance"
+
 #enable Extension modules for a given Postgresql database
 # if ['solo','db_master', 'db_slave'].include?(node[:instance_role])
-  # Extensions that support both Postgres 9.0, 9.1 and 9.2
+  # Extensions that support Postgres >= 9.0
   # postgresql9_autoexplain "dbname"
   # postgresql9_btree_gin "dbname"
   # postgresql9_btree_gist "dbname"
@@ -128,8 +143,8 @@ include_recipe "redis"
   # PostGis 1.5 (use with versions 9.0, 9.1, 9.2)
   # postgresql9_postgis "dbname"
 
-  # PostGis 2.0 (use with version 9.2)
-  # postgresql9_postgis2 "dbname"
+  # PostGis 2.0 (use with versions >= 9.2)
+  #postgresql9_postgis2 "dbname"
   # postgresql9_seg "dbname"
   # postgresql9_sslinfo "dbname"
   # postgresql9_tablefunc "dbname"
@@ -143,9 +158,14 @@ include_recipe "redis"
   # postgresql9_xml2 "dbname"
 
   # 9.2 Extensions
+  # Note: pg_stat_statements requires a server restart to complete installation
   # postgresql9_pg_stat_statements "dbname"
 
-  #Admin-Level Contribs
+  # Admin-Level Contribs
   # postgresql9_pg_buffercache "postgres"
   # postgresql9_pg_freespacemap "postgres"
-#end
+# end
+
+#uncomment to include the motd customization related to the environment
+#include_recipe "env_motd"
+
