@@ -1,3 +1,6 @@
+# uncomment to use a custom database.yml configuration
+# include_recipe "database_yml_custom"
+
 #execute "testing" do
 #  command %Q{
 #    echo "i ran at #{Time.now}" >> /root/cheftime
@@ -72,6 +75,9 @@ include_recipe "redis-yml"
 #uncomment to run the redis recipe
 include_recipe "redis"
 
+#uncomment to run the env-yaml recipe
+#include_recipe "env-yaml"
+
 #uncomment to run the api-keys-yml recipe
 # include_recipe "api-keys-yml"
 
@@ -96,6 +102,9 @@ include_recipe "redis"
 
 #uncomment to include the Elasticsearch recipe
 #include_recipe "elasticsearch"
+
+#uncomment to include the Elasticsearch recipe on solos and app masters
+#include_recipe "elasticsearch::non_util"
 
 # To install specific plugins to Elasticsearch see below as an example
 #es_plugin "cloud-aws" do
@@ -140,11 +149,12 @@ include_recipe "redis"
   # postgresql9_pgcrypto "dbname"
   # postgresql9_pgrowlocks "dbname"
 
-  # PostGis 1.5 (use with versions 9.0, 9.1, 9.2)
+  # PostGis 1.5 (use with versions 9.0, 9.1, 9.2 on 2009a/stable-v2)
   # postgresql9_postgis "dbname"
 
-  # PostGis 2.0 (use with versions >= 9.2)
-  #postgresql9_postgis2 "dbname"
+  # PostGis 2.1 (use with version 9.2 on 2009a/stable-v2 and all versions on 12.11/stable-v4)
+  # postgresql9_postgis2 "dbname"
+
   # postgresql9_seg "dbname"
   # postgresql9_sslinfo "dbname"
   # postgresql9_tablefunc "dbname"
@@ -169,3 +179,7 @@ include_recipe "redis"
 #uncomment to include the motd customization related to the environment
 #include_recipe "env_motd"
 
+#include_recipe "db_restore"
+
+#uncomment to install PHP 5.5.x
+#include_recipe "php55"
